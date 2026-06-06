@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Wifi, Waves, UtensilsCrossed, Car, Dumbbell } from 'lucide-react'
 import { getRooms } from '@/features/rooms/actions'
 import { RoomCard } from '@/features/rooms/RoomCard'
@@ -50,7 +51,14 @@ export default async function HomePage() {
               ))}
             </ul>
           </div>
-          <div className="bg-gray-100 rounded-2xl h-56 md:h-72 flex items-center justify-center text-gray-400 text-sm">Hotel Image</div>
+          <div className="relative rounded-2xl overflow-hidden h-56 md:h-72">
+            <Image
+              src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80"
+              alt="GrandStay Hotel"
+              fill
+              className="object-cover"
+            />
+          </div>
         </div>
       </section>
 
