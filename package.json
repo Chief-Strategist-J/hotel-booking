@@ -19,7 +19,6 @@
     "fresh": "docker compose down -v && docker compose up -d && sleep 3 && prisma db push && tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.7.4",
     "@hookform/resolvers": "^3.9.1",
     "@prisma/client": "^5.22.0",
     "bcryptjs": "^2.4.3",
