@@ -22,3 +22,8 @@ export function generateRef() {
   const id = crypto.randomUUID().replace(/-/g, '').slice(0, 12).toUpperCase()
   return `HTL-${id.slice(0, 6)}-${id.slice(6)}`
 }
+
+/** Strip Prisma Decimal / Date objects so values are safe to pass to Client Components */
+export function serialize<T>(data: T): T {
+  return JSON.parse(JSON.stringify(data))
+}

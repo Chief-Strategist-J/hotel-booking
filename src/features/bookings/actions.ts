@@ -1,7 +1,7 @@
 'use server'
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
-import { generateRef } from '@/lib/utils'
+import { generateRef, serialize } from '@/lib/utils'
 import { sendConfirmationEmail, sendAdminEmail } from '@/features/email/mailer'
 import type { BookingFormData, BookingStatus } from './types'
 
@@ -32,7 +32,7 @@ export async function createBooking(data: BookingFormData) {
 
   await Promise.all([sendConfirmationEmail(booking), sendAdminEmail(booking)]).catch(console.error)
   revalidatePath('/admin/bookings')
-  return booking
+  return serialize(booking)
 }
 
 export async function getBookings(filter?: string) {
@@ -43,24 +43,26 @@ export async function getBookings(filter?: string) {
     cancelled: ['CANCELLED', 'NO_SHOW'],
   }
   const statuses = filter ? statusMap[filter] : undefined
-  return prisma.booking.findMany({
+  const bookings = await prisma.booking.findMany({
     where: statuses ? { bookingStatus: { in: statuses as any } } : undefined,
     include: { room: { include: { images: true } }, payment: true },
     orderBy: { createdAt: 'desc' },
   })
+  return serialize(bookings)
 }
 
 export async function getBookingByRef(ref: string) {
-  return prisma.booking.findUnique({
+  const booking = await prisma.booking.findUnique({
     where: { bookingReference: ref },
     include: { room: { include: { images: true } }, payment: true },
   })
+  return booking ? serialize(booking) : null
 }
 
 export async function updateBookingStatus(id: string, status: BookingStatus) {
   const booking = await prisma.booking.update({ where: { id }, data: { bookingStatus: status } })
   revalidatePath('/admin/bookings')
-  return booking
+  return serialize(booking)
 }
 
 export async function getDashboardStats() {

@@ -1,10 +1,12 @@
 'use server'
 import { prisma } from '@/lib/prisma'
 import { revalidatePath } from 'next/cache'
+import { serialize } from '@/lib/utils'
 import type { RoomFormData } from './types'
 
 export async function getRooms() {
-  return prisma.room.findMany({ include: { images: true }, orderBy: { createdAt: 'desc' } })
+  const rooms = await prisma.room.findMany({ include: { images: true }, orderBy: { createdAt: 'desc' } })
+  return serialize(rooms)
 }
 
 export async function getAvailableRooms(checkIn: string, checkOut: string) {
@@ -16,15 +18,17 @@ export async function getAvailableRooms(checkIn: string, checkOut: string) {
     },
     select: { roomId: true },
   })
-  return prisma.room.findMany({
+  const rooms = await prisma.room.findMany({
     where: { status: 'AVAILABLE', id: { notIn: blocked.map((b) => b.roomId) } },
     include: { images: true },
     orderBy: { price: 'asc' },
   })
+  return serialize(rooms)
 }
 
 export async function getRoomById(id: string) {
-  return prisma.room.findUnique({ where: { id }, include: { images: true } })
+  const room = await prisma.room.findUnique({ where: { id }, include: { images: true } })
+  return room ? serialize(room) : null
 }
 
 export async function isRoomAvailable(roomId: string, checkIn: string, checkOut: string) {
@@ -43,14 +47,14 @@ export async function createRoom(data: RoomFormData) {
   const room = await prisma.room.create({ data })
   revalidatePath('/admin/rooms')
   revalidatePath('/rooms')
-  return room
+  return serialize(room)
 }
 
 export async function updateRoom(id: string, data: Partial<RoomFormData>) {
   const room = await prisma.room.update({ where: { id }, data })
   revalidatePath('/admin/rooms')
   revalidatePath('/rooms')
-  return room
+  return serialize(room)
 }
 
 export async function deleteRoom(id: string) {
