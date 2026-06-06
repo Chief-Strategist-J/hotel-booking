@@ -122,10 +122,10 @@ export function BookingForm({ room, checkIn, checkOut }: { room: Room; checkIn: 
           Payment Method
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {[
-            { value: 'ONLINE',       icon: CreditCard,  title: 'Pay Online',    desc: 'Secure card payment via Stripe' },
-            { value: 'PAY_AT_HOTEL', icon: Building2,   title: 'Pay at Hotel',  desc: 'Pay cash or card on arrival' },
-          ] as const).map(({ value, icon: Icon, title, desc }) => (
+          {([
+            { value: 'ONLINE'       as const, icon: CreditCard, title: 'Pay Online',   desc: 'Secure card payment via Stripe' },
+            { value: 'PAY_AT_HOTEL' as const, icon: Building2,  title: 'Pay at Hotel', desc: 'Pay cash or card on arrival' },
+          ]).map(({ value, icon: Icon, title, desc }) => (
             <label
               key={value}
               className={`flex items-center gap-3 p-4 border-2 rounded-xl cursor-pointer transition-all duration-200 ${
