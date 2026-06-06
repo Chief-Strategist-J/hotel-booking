@@ -70,7 +70,7 @@ else
     --org-id "$NEON_ORG_ID" \
     --region-id aws-us-east-1 \
     --output json \
-    | jq -r '.id')
+    | jq -r '.project.id')
   info "Created project: $PROJECT_ID"
 fi
 

@@ -38,7 +38,7 @@ export default async function RoomsPage({ searchParams }: { searchParams: { chec
       {/* Sticky availability bar */}
       <div className="bg-white border-b border-gray-100 shadow-sm sticky top-16 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4">
-          <AvailabilityChecker defaultCheckIn={checkIn} defaultCheckOut={checkOut} />
+          <AvailabilityChecker defaultCheckIn={checkIn} defaultCheckOut={checkOut} layout="row" />
         </div>
       </div>
 
