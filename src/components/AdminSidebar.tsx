@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, BedDouble, CalendarCheck, CreditCard, LogOut, Menu, X } from 'lucide-react'
+import { LayoutDashboard, BedDouble, CalendarCheck, CreditCard, Settings, LogOut, Menu, X } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 
 const nav = [
@@ -10,6 +10,7 @@ const nav = [
   { href: '/admin/rooms', label: 'Rooms', icon: BedDouble },
   { href: '/admin/bookings', label: 'Bookings', icon: CalendarCheck },
   { href: '/admin/payments', label: 'Payments', icon: CreditCard },
+  { href: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
 function SidebarContent({ onClose }: { onClose?: () => void }) {

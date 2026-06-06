@@ -1,12 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { getSetting } from '@/features/settings/actions'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+async function getStripe() {
+  const key = (await getSetting('stripe_secret_key')) || process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('Stripe secret key not configured. Go to Admin → Settings to add it.')
+  return new Stripe(key)
+}
 
 export async function POST(req: NextRequest) {
   const { bookingId, email, amount, roomName } = await req.json()
 
   try {
+    const stripe = await getStripe()
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       customer_email: email,

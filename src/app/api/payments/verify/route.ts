@@ -1,15 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
+import { getSetting } from '@/features/settings/actions'
 import { confirmPayment } from '@/features/payments/actions'
 import { prisma } from '@/lib/prisma'
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+async function getStripe() {
+  const key = (await getSetting('stripe_secret_key')) || process.env.STRIPE_SECRET_KEY
+  if (!key) throw new Error('Stripe not configured')
+  return new Stripe(key)
+}
 
 export async function GET(req: NextRequest) {
   const sessionId = req.nextUrl.searchParams.get('session_id')
   if (!sessionId) return NextResponse.redirect(new URL('/rooms', req.url))
 
   try {
+    const stripe = await getStripe()
     const session = await stripe.checkout.sessions.retrieve(sessionId)
 
     if (session.payment_status === 'paid') {
@@ -26,7 +32,7 @@ export async function GET(req: NextRequest) {
       }
     }
   } catch {
-    // fall through to redirect /rooms on any error
+    // fall through to /rooms on error
   }
 
   return NextResponse.redirect(new URL('/rooms', req.url))

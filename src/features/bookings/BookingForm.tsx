@@ -35,7 +35,7 @@ export function BookingForm({ room, checkIn, checkOut }: { room: Room; checkIn: 
         })
         const json = await res.json()
         if (json.authorization_url) { window.location.href = json.authorization_url; return }
-        throw new Error('Payment init failed')
+        throw new Error(json.error || 'Payment init failed')
       }
       router.push(`/booking/confirmation?ref=${booking.bookingReference}`)
     } catch (e: any) {
