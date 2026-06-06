@@ -12,7 +12,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <SessionProvider session={session}>
       <div className="flex min-h-screen bg-gray-50">
         <AdminSidebar />
-        <main className="flex-1 p-8 overflow-auto">{children}</main>
+        {/* pt-14 on mobile offsets the fixed top bar; md:pt-0 resets for desktop */}
+        <main className="flex-1 p-4 md:p-8 overflow-auto pt-[calc(3.5rem+1rem)] md:pt-8">
+          {children}
+        </main>
       </div>
     </SessionProvider>
   )

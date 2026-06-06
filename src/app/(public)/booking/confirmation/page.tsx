@@ -34,7 +34,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
           <p className="text-xs text-gray-500 uppercase tracking-wide">Booking Reference</p>
           <p className="text-2xl font-bold text-primary font-mono">{booking.bookingReference}</p>
         </div>
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           {[
             ['Guest', booking.guestName],
             ['Email', booking.guestEmail],
@@ -61,7 +61,7 @@ export default async function ConfirmationPage({ searchParams }: { searchParams:
         </div>
       </div>
 
-      <div className="flex gap-4 justify-center mt-8">
+      <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
         <Link href="/" className="border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium px-6 py-3 rounded-xl transition-colors">Back to Home</Link>
         <Link href="/rooms" className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-xl transition-colors">Browse More Rooms</Link>
       </div>

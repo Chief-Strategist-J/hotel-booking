@@ -15,7 +15,7 @@ export default async function AdminPaymentsPage() {
     <div>
       <h1 className="font-serif text-2xl font-bold text-gray-900 mb-6">Payments</h1>
 
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         {[
           { label: 'Total Revenue', value: formatCurrency(totalRevenue), cls: 'text-green-600 bg-green-50' },
           { label: 'Pending', value: String(pending), cls: 'text-amber-600 bg-amber-50' },

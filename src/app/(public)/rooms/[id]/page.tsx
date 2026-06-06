@@ -18,14 +18,24 @@ export default async function RoomDetailPage({ params, searchParams }: Props) {
   if (!room) notFound()
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      <div className="grid md:grid-cols-3 gap-10">
-        <div className="md:col-span-2">
+    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+      <div className="grid md:grid-cols-3 gap-8 md:gap-10">
+        {/* Booking card — shows first on mobile, last on desktop */}
+        <div className="md:col-span-1 md:order-2">
+          <div className="md:sticky md:top-20 bg-white border rounded-xl p-5 shadow-md">
+            <p className="text-2xl md:text-3xl font-bold text-primary">{formatCurrency(room.price)}</p>
+            <p className="text-gray-500 text-sm mb-5">per night</p>
+            <AvailabilityChecker roomId={room.id} defaultCheckIn={searchParams.checkIn} defaultCheckOut={searchParams.checkOut} />
+          </div>
+        </div>
+
+        {/* Room details */}
+        <div className="md:col-span-2 md:order-1">
           <RoomGallery images={room.images as any} name={room.name} />
           <div className="mt-6">
-            <div className="flex items-start justify-between mb-3">
-              <h1 className="font-serif text-3xl font-bold text-primary">{room.name}</h1>
-              <span className="bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full mt-1">
+            <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
+              <h1 className="font-serif text-2xl md:text-3xl font-bold text-primary">{room.name}</h1>
+              <span className="bg-gray-100 text-gray-700 text-xs font-semibold px-3 py-1 rounded-full">
                 {room.type.charAt(0) + room.type.slice(1).toLowerCase()}
               </span>
             </div>
@@ -34,7 +44,7 @@ export default async function RoomDetailPage({ params, searchParams }: Props) {
             {room.amenities.length > 0 && (
               <div>
                 <h3 className="font-semibold text-gray-900 mb-3">Amenities</h3>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {room.amenities.map((a) => (
                     <div key={a} className="flex items-center gap-2 text-sm text-gray-600">
                       <CheckCircle className="h-4 w-4 text-green-500 flex-shrink-0" />{a}
@@ -43,14 +53,6 @@ export default async function RoomDetailPage({ params, searchParams }: Props) {
                 </div>
               </div>
             )}
-          </div>
-        </div>
-
-        <div className="md:col-span-1">
-          <div className="sticky top-20 bg-white border rounded-xl p-6 shadow-md">
-            <p className="text-3xl font-bold text-primary">{formatCurrency(room.price)}</p>
-            <p className="text-gray-500 text-sm mb-6">per night</p>
-            <AvailabilityChecker roomId={room.id} defaultCheckIn={searchParams.checkIn} defaultCheckOut={searchParams.checkOut} />
           </div>
         </div>
       </div>

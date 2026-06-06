@@ -24,25 +24,25 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative bg-primary text-white min-h-[90vh] flex items-center">
+      <section className="relative bg-primary text-white min-h-[85vh] flex items-center">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/95 to-primary/70" />
-        <div className="relative max-w-6xl mx-auto px-4 py-24">
+        <div className="relative max-w-6xl mx-auto px-4 py-16 md:py-24">
           <p className="text-amber-400 font-medium mb-3 tracking-widest text-sm uppercase">Welcome to</p>
-          <h1 className="font-serif text-5xl md:text-7xl font-bold mb-4 leading-tight">GrandStay Hotel</h1>
-          <p className="text-xl text-blue-100 mb-8 max-w-xl">Where luxury meets comfort. Experience world-class hospitality in the heart of Lagos.</p>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link href="/rooms" className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-4 rounded-xl transition-colors inline-block text-center">Book Your Stay</Link>
-            <Link href="#about" className="border border-white text-white hover:bg-white hover:text-primary font-semibold px-8 py-4 rounded-xl transition-colors inline-block text-center">Learn More</Link>
+          <h1 className="font-serif text-4xl sm:text-5xl md:text-7xl font-bold mb-4 leading-tight">GrandStay Hotel</h1>
+          <p className="text-base md:text-xl text-blue-100 mb-8 max-w-xl">Where luxury meets comfort. Experience world-class hospitality in the heart of Lagos.</p>
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <Link href="/rooms" className="bg-amber-500 hover:bg-amber-600 text-white font-semibold px-8 py-3 md:py-4 rounded-xl transition-colors text-center">Book Your Stay</Link>
+            <Link href="#about" className="border border-white text-white hover:bg-white hover:text-primary font-semibold px-8 py-3 md:py-4 rounded-xl transition-colors text-center">Learn More</Link>
           </div>
         </div>
       </section>
 
       {/* About */}
-      <section id="about" className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+      <section id="about" className="py-16 md:py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div>
             <p className="text-amber-500 font-medium mb-2 uppercase tracking-wide text-sm">About Us</p>
-            <h2 className="text-4xl font-bold text-primary mb-4">A Legacy of Luxury</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary mb-4">A Legacy of Luxury</h2>
             <p className="text-gray-600 leading-relaxed mb-6">GrandStay Hotel offers an unparalleled hospitality experience. Nestled in the vibrant heart of Victoria Island, we blend modern elegance with warm, personalised service to create memories that last a lifetime.</p>
             <ul className="space-y-2 text-gray-700">
               {['Prime Victoria Island location', 'World-class dining & spa', '24/7 concierge service', 'Business & events facilities'].map((item) => (
@@ -50,16 +50,16 @@ export default async function HomePage() {
               ))}
             </ul>
           </div>
-          <div className="bg-gray-100 rounded-2xl h-72 flex items-center justify-center text-gray-400 text-sm">Hotel Image</div>
+          <div className="bg-gray-100 rounded-2xl h-56 md:h-72 flex items-center justify-center text-gray-400 text-sm">Hotel Image</div>
         </div>
       </section>
 
       {/* Featured Rooms */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-16 md:py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8 md:mb-10">
             <p className="text-amber-500 font-medium uppercase tracking-wide text-sm mb-2">Our Rooms</p>
-            <h2 className="text-4xl font-bold text-primary">Featured Accommodations</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary">Featured Accommodations</h2>
           </div>
           {featured.length ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -75,11 +75,11 @@ export default async function HomePage() {
       </section>
 
       {/* Amenities */}
-      <section id="amenities" className="py-20 bg-white">
+      <section id="amenities" className="py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8 md:mb-10">
             <p className="text-amber-500 font-medium uppercase tracking-wide text-sm mb-2">What We Offer</p>
-            <h2 className="text-4xl font-bold text-primary">Hotel Amenities</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-primary">Hotel Amenities</h2>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
             {amenities.map(({ icon: Icon, label }) => (
@@ -93,11 +93,11 @@ export default async function HomePage() {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20 bg-primary text-white">
+      <section className="py-16 md:py-20 bg-primary text-white">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-10">
+          <div className="text-center mb-8 md:mb-10">
             <p className="text-amber-400 font-medium uppercase tracking-wide text-sm mb-2">Guest Reviews</p>
-            <h2 className="text-4xl font-bold">What Our Guests Say</h2>
+            <h2 className="text-3xl md:text-4xl font-bold">What Our Guests Say</h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((t) => (

@@ -11,7 +11,7 @@ export default async function RoomsPage({ searchParams }: { searchParams: { chec
   const visible = rooms.filter((r) => r.status === 'AVAILABLE')
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
+    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
       <div className="mb-8">
         <h1 className="font-serif text-4xl font-bold text-primary mb-2">Our Rooms</h1>
         <p className="text-gray-600">Choose the perfect room for your stay.</p>
