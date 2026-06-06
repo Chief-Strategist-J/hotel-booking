@@ -31,7 +31,7 @@ export function BookingForm({ room, checkIn, checkOut }: { room: Room; checkIn: 
         const res = await fetch('/api/payments/initialize', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ bookingId: booking.id, email: data.guestEmail, amount: total }),
+          body: JSON.stringify({ bookingId: booking.id, email: data.guestEmail, amount: total, roomName: room.name }),
         })
         const json = await res.json()
         if (json.authorization_url) { window.location.href = json.authorization_url; return }
