@@ -1,0 +1,111 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Admin {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now()) @map("created_at")
+  @@map("admins")
+}
+
+model Room {
+  id          String      @id @default(cuid())
+  name        String
+  type        RoomType
+  description String
+  price       Decimal     @db.Decimal(10, 2)
+  capacity    Int
+  amenities   String[]
+  status      RoomStatus  @default(AVAILABLE)
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+  images      RoomImage[]
+  bookings    Booking[]
+  @@map("rooms")
+}
+
+model RoomImage {
+  id        String  @id @default(cuid())
+  roomId    String  @map("room_id")
+  imageUrl  String  @map("image_url")
+  isPrimary Boolean @default(false) @map("is_primary")
+  room      Room    @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  @@map("room_images")
+}
+
+model Booking {
+  id               String        @id @default(cuid())
+  bookingReference String        @unique @map("booking_reference")
+  guestName        String        @map("guest_name")
+  guestEmail       String        @map("guest_email")
+  guestPhone       String        @map("guest_phone")
+  roomId           String        @map("room_id")
+  checkIn          DateTime      @map("check_in")
+  checkOut         DateTime      @map("check_out")
+  guests           Int
+  totalAmount      Decimal       @db.Decimal(10, 2) @map("total_amount")
+  bookingStatus    BookingStatus @default(PENDING) @map("booking_status")
+  paymentStatus    PaymentStatus @default(UNPAID) @map("payment_status")
+  paymentMethod    PaymentMethod @map("payment_method")
+  specialRequests  String?       @map("special_requests")
+  createdAt        DateTime      @default(now()) @map("created_at")
+  updatedAt        DateTime      @updatedAt @map("updated_at")
+  room             Room          @relation(fields: [roomId], references: [id])
+  payment          Payment?
+  @@map("bookings")
+}
+
+model Payment {
+  id                   String        @id @default(cuid())
+  bookingId            String        @unique @map("booking_id")
+  amount               Decimal       @db.Decimal(10, 2)
+  gateway              String
+  transactionReference String?       @map("transaction_reference")
+  status               PaymentStatus @default(UNPAID)
+  paidAt               DateTime?     @map("paid_at")
+  createdAt            DateTime      @default(now()) @map("created_at")
+  booking              Booking       @relation(fields: [bookingId], references: [id])
+  @@map("payments")
+}
+
+enum RoomType {
+  STANDARD
+  DELUXE
+  SUITE
+  EXECUTIVE
+  PENTHOUSE
+}
+
+enum RoomStatus {
+  AVAILABLE
+  UNAVAILABLE
+}
+
+enum BookingStatus {
+  PENDING
+  RESERVED
+  CONFIRMED
+  CHECKED_IN
+  CHECKED_OUT
+  CANCELLED
+  NO_SHOW
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+  REFUNDED
+}
+
+enum PaymentMethod {
+  ONLINE
+  PAY_AT_HOTEL
+}
