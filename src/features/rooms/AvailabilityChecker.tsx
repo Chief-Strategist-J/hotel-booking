@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { CalendarDays, Search } from 'lucide-react'
 
 interface FormData { checkIn: string; checkOut: string }
 interface Props { roomId?: string; defaultCheckIn?: string; defaultCheckOut?: string }
@@ -22,21 +23,27 @@ export function AvailabilityChecker({ roomId, defaultCheckIn, defaultCheckOut }:
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col sm:flex-row gap-3">
       <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
-        <input type="date" {...register('checkIn', { required: 'Required' })}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Check-in</label>
+        <div className="relative">
+          <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+          <input type="date" {...register('checkIn', { required: 'Required' })}
+            className="input pl-10" />
+        </div>
         {errors.checkIn && <p className="text-red-500 text-xs mt-1">{errors.checkIn.message}</p>}
       </div>
       <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
-        <input type="date" {...register('checkOut', { required: 'Required' })}
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary" />
+        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Check-out</label>
+        <div className="relative">
+          <CalendarDays className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
+          <input type="date" {...register('checkOut', { required: 'Required' })}
+            className="input pl-10" />
+        </div>
         {errors.checkOut && <p className="text-red-500 text-xs mt-1">{errors.checkOut.message}</p>}
       </div>
       <div className="sm:self-end">
-        <button type="submit"
-          className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white font-medium px-6 py-[0.5625rem] rounded-lg transition-colors whitespace-nowrap">
-          {roomId ? 'Book Now' : 'Check Availability'}
+        <button type="submit" className="btn-primary w-full sm:w-auto gap-2">
+          <Search className="h-4 w-4" />
+          {roomId ? 'Book Now' : 'Check'}
         </button>
       </div>
     </form>

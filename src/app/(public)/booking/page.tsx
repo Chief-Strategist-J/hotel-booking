@@ -1,11 +1,17 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import { ArrowLeft, CalendarDays, Moon, ShieldCheck, Star } from 'lucide-react'
 import { getRoomById, isRoomAvailable } from '@/features/rooms/actions'
 import { BookingForm } from '@/features/bookings/BookingForm'
 import { formatCurrency, calculateNights } from '@/lib/utils'
-import Image from 'next/image'
-import type { Metadata } from 'next'
 
-export const metadata: Metadata = { title: 'Book Your Room' }
+export const metadata: Metadata = {
+  title: 'Book Your Room',
+  description: 'Complete your booking at GrandStay Hotel. Secure payment via Stripe.',
+  robots: { index: false },
+}
 
 export default async function BookingPage({ searchParams }: { searchParams: { roomId?: string; checkIn?: string; checkOut?: string } }) {
   const { roomId, checkIn, checkOut } = searchParams
@@ -19,40 +25,88 @@ export default async function BookingPage({ searchParams }: { searchParams: { ro
   const nights = calculateNights(checkIn, checkOut)
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
-      <h1 className="font-serif text-2xl md:text-3xl font-bold text-primary mb-6 md:mb-8">Complete Your Booking</h1>
-
-      {!available ? (
-        <div className="text-center py-16">
-          <p className="text-xl font-medium text-gray-700 mb-2">Room unavailable for selected dates</p>
-          <a href="/rooms" className="text-primary underline text-sm">Browse other rooms</a>
+    <div className="min-h-screen bg-gray-50/60">
+      {/* Top bar */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+          <Link href={`/rooms/${roomId}`} className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary transition-colors">
+            <ArrowLeft className="h-4 w-4" /> Back to room
+          </Link>
+          <div className="flex items-center gap-1.5 text-xs text-green-600 font-medium">
+            <ShieldCheck className="h-4 w-4" />
+            Secure checkout
+          </div>
         </div>
-      ) : (
-        <div className="grid md:grid-cols-5 gap-6 md:gap-10">
-          {/* Room summary — below form on mobile, side panel on desktop */}
-          <div className="md:col-span-2 md:order-2">
-            <div className="bg-gray-50 rounded-xl overflow-hidden border md:sticky md:top-20">
-              <div className="relative h-44 md:h-48">
-                {primary
-                  ? <Image src={primary.imageUrl} alt={room.name} fill className="object-cover" />
-                  : <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">No image</div>
-                }
-              </div>
-              <div className="p-4 md:p-5 text-sm text-gray-700 space-y-2">
-                <p className="font-serif text-lg md:text-xl font-bold text-primary">{room.name}</p>
-                <p><span className="text-gray-500">Check-in:</span> <span className="font-medium">{checkIn}</span></p>
-                <p><span className="text-gray-500">Check-out:</span> <span className="font-medium">{checkOut}</span></p>
-                <p><span className="text-gray-500">Duration:</span> <span className="font-medium">{nights} night{nights !== 1 ? 's' : ''}</span></p>
-                <p className="border-t pt-2 text-base font-bold text-primary">Total: {formatCurrency(Number(room.price) * nights)}</p>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 md:py-12">
+        <h1 className="font-serif text-2xl md:text-3xl font-bold text-primary mb-8">Complete Your Booking</h1>
+
+        {!available ? (
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-12 text-center">
+            <p className="text-xl font-semibold text-gray-700 mb-2">Room unavailable for selected dates</p>
+            <p className="text-gray-500 text-sm mb-6">Please choose different dates or browse other rooms.</p>
+            <Link href="/rooms" className="inline-flex items-center bg-primary hover:bg-primary-800 text-white font-semibold text-sm px-6 py-3 rounded-xl transition-colors">
+              Browse Rooms
+            </Link>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-5 gap-6 md:gap-10">
+            {/* Booking form */}
+            <div className="md:col-span-3 md:order-1">
+              <BookingForm room={room as any} checkIn={checkIn} checkOut={checkOut} />
+            </div>
+
+            {/* Room summary */}
+            <div className="md:col-span-2 md:order-2">
+              <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,.08)] md:sticky md:top-[84px]">
+                <div className="relative h-48">
+                  {primary
+                    ? <Image src={primary.imageUrl} alt={room.name} fill className="object-cover" sizes="(max-width: 768px) 100vw, 40vw" />
+                    : <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 text-sm">No image</div>
+                  }
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute bottom-4 left-4 right-4">
+                    <p className="font-serif text-lg font-bold text-white leading-snug">{room.name}</p>
+                    <p className="text-white/75 text-sm">{room.type.charAt(0) + room.type.slice(1).toLowerCase()}</p>
+                  </div>
+                </div>
+
+                <div className="p-5 space-y-3.5">
+                  <div className="flex items-center gap-2.5 text-sm text-gray-600">
+                    <CalendarDays className="h-4 w-4 text-gold flex-shrink-0" />
+                    <span>{checkIn}</span>
+                    <span className="text-gray-400">→</span>
+                    <span>{checkOut}</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-sm text-gray-600">
+                    <Moon className="h-4 w-4 text-gold flex-shrink-0" />
+                    <span>{nights} night{nights !== 1 ? 's' : ''}</span>
+                  </div>
+
+                  <div className="border-t border-gray-100 pt-3.5 flex justify-between items-center">
+                    <span className="text-sm text-gray-600">Total</span>
+                    <span className="text-xl font-bold text-primary font-serif">
+                      {formatCurrency(Number(room.price) * nights)}
+                    </span>
+                  </div>
+
+                  <div className="bg-green-50 rounded-xl px-4 py-3 space-y-1.5">
+                    {[
+                      { icon: ShieldCheck, text: 'Free cancellation within 24h' },
+                      { icon: Star,        text: 'Best rate guaranteed' },
+                    ].map(({ icon: Icon, text }) => (
+                      <p key={text} className="flex items-center gap-2 text-xs text-green-700">
+                        <Icon className="h-3.5 w-3.5 flex-shrink-0" />{text}
+                      </p>
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-
-          <div className="md:col-span-3 md:order-1">
-            <BookingForm room={room as any} checkIn={checkIn} checkOut={checkOut} />
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }
